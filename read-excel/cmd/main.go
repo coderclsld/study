@@ -106,30 +106,42 @@ func processExecl(db *gorm.DB, arr [][]string) {
 func reserveExcelToDb(arr [][]string) {
 	for i := 0; i < len(arr); i++ {
 		if arr[i][0] != "" {
-			deep(arr, 0, 0, i)
+			Len := searchLen(arr, i, 0)
+			if Len != -1 {
+				deep(arr, i, 0, Len, 0)
+			}
 		}
 	}
 }
 
-func deep(arr [][]string, level int, pid, x int) {
+func deep(arr [][]string, x, y int, Len int, pid int) {
 	bus := &BusinessKnowledge{
 		Business_pid: pid,
-		Name:         arr[x][level],
+		Name:         arr[x][y],
 	}
 	if err := db.Create(&bus).Error; err != nil {
 		fmt.Println("插入失败", err)
 		return
 	}
-	if level == 3 || x == len(arr) {
+	if y == 3 || x == len(arr)-1 {
 		return
 	}
-	for i := x; x < len(arr); i++ {
-		if arr[i][level] != "" {
-			for j := x; j < i; j++ {
-				if arr[j][level] != "" {
-					deep(arr, level+1, bus.Business_id, j)
+	for i := x; x < Len; i++ {
+		if arr[i][y+1] != "" {
+			for j := x + 1; j < Len; j++ {
+				if arr[j][y+1] != "" {
+					deep(arr, i, y+1, j, bus.Business_id)
 				}
 			}
 		}
 	}
+}
+
+func searchLen(arr [][]string, x, y int) int {
+	for i := x; i < len(arr); i++ {
+		if arr[i][y] != "" {
+			return i
+		}
+	}
+	return -1
 }

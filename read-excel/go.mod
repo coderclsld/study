@@ -1,6 +1,6 @@
 module read-excel
 
-go 1.20
+go 1.19
 
 require (
 	github.com/xuri/excelize/v2 v2.7.1
