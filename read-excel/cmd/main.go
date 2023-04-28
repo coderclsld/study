@@ -106,6 +106,7 @@ func processExecl(db *gorm.DB, arr [][]string) {
 func reserveExcelToDb(arr [][]string) {
 	for i := 0; i < len(arr); i++ {
 		if arr[i][0] != "" {
+
 			deep(arr, 0, 0, i)
 		}
 	}
@@ -123,7 +124,7 @@ func deep(arr [][]string, level int, pid, x int) {
 	if level == 3 || x == len(arr) {
 		return
 	}
-	for i := x; x < len(arr); i++ {
+	for i := x; i < len(arr); i++ {
 		if arr[i][level] != "" {
 			for j := x; j < i; j++ {
 				if arr[j][level] != "" {
